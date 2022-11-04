@@ -12,8 +12,8 @@ bool equalPaths(Node * root)
     {
         return true;
     }
-    
-    if(depth(root -> left) == depth(root -> right))
+
+    if(depth(root -> left) == depth(root -> right) || ((depth(root -> left) <= 1) && (depth(root -> right) <= 1)))
     {
         return true;
     }
