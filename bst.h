@@ -247,7 +247,7 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
 
     // Add helper functions here
-
+    void balance();
 
 protected:
     Node<Key, Value>* root_;
@@ -444,7 +444,24 @@ Value const & BinarySearchTree<Key, Value>::operator[](const Key& key) const
 template<class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
-    // TODO
+    //if tree empty
+    if(root_ == nullptr){
+        root_ = new Node<Key, Value>(keyValuePair.first(), keyValuePair.second(), nullptr);
+        return true;
+    }
+
+    BinarySearchTree<Key,Value>::iterator it = root_;
+    while(it != nullptr)
+    {
+        
+    }
+
+    //if not balanced
+    if(!isBalanced())
+    {
+        
+
+    }
 }
 
 
@@ -457,6 +474,7 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::remove(const Key& key)
 {
     // TODO
+
 }
 
 
