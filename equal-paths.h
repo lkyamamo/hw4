@@ -4,6 +4,7 @@
 #ifndef EQUAL_PATHS_H
 #define EQUAL_PATHS_H
 #include <stdlib.h>
+#include <algorithm>
 
 struct Node {
     int key;
@@ -25,5 +26,6 @@ struct Node {
  * @param root Pointer to the root of the tree to check for equal paths
  */
 bool equalPaths(Node * root);
+int depth(Node*root);
 
 #endif
