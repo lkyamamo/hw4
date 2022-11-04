@@ -8,6 +8,11 @@ using namespace std;
 bool equalPaths(Node * root)
 {
     // Add your code below
+    if(root == nullptr)
+    {
+        return true;
+    }
+    
     if(depth(root -> left) == depth(root -> right))
     {
         return true;
