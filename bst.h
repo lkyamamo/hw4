@@ -264,7 +264,8 @@ Begin implementations for the BinarySearchTree::iterator class.
 * Explicit constructor that initializes an iterator with a given node pointer.
 */
 template<class Key, class Value>
-BinarySearchTree<Key, Value>::iterator::iterator(Node<Key,Value> *ptr)
+BinarySearchTree<Key, Value>::iterator::iterator(Node<Key,Value> *ptr):
+current_(ptr)
 {
     // TODO
 }
@@ -273,10 +274,10 @@ BinarySearchTree<Key, Value>::iterator::iterator(Node<Key,Value> *ptr)
 * A default constructor that initializes the iterator to NULL.
 */
 template<class Key, class Value>
-BinarySearchTree<Key, Value>::iterator::iterator() 
+BinarySearchTree<Key, Value>::iterator::iterator():
+current_(nullptr)
 {
     // TODO
-
 }
 
 /**
@@ -309,6 +310,10 @@ BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
+    if(this -> current_ -> getKey() == rhs -> current_ -> getKey())
+    {
+        return true;
+    }
 }
 
 /**
@@ -333,7 +338,22 @@ typename BinarySearchTree<Key, Value>::iterator&
 BinarySearchTree<Key, Value>::iterator::operator++()
 {
     // TODO
-
+    // has a right child then go to 
+    if(current_ -> getRight() != nullptr)
+    {
+        Node<Key,Value>* temp = current_ -> getRight();
+        while(temp -> getLeft() != nullptr)
+        {
+            temp = temp -> getLeft();
+        }
+        current_ = temp;
+    }
+    // has a parent
+    else if(current_ -> getParent() != nullptr)
+    {
+        
+    }
+    //has no parent means it is the root node with no right child
 }
 
 
