@@ -855,7 +855,12 @@ int BinarySearchTree<Key,Value>::calculateHeight(const Node<Key,Value>* n) const
 template<typename Key, typename Value>
 void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>* n)
 {
-    if(p == nullptr || p -> getParent() == nullptr) return;
+    if(p == nullptr) return;
+    else if(p -> getParent() == nullptr)
+    {
+        root_ = p;
+        return;
+    }
     Node<Key,Value>* g = p -> getParent();
 
     //if p is the left child
@@ -896,28 +901,6 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
             rotateLeft(g);
         }
     }
-
-    /*Node<Key,Value>* current = root_;
-    int heightDif = calculateHeightIfBalanced(current -> getRight()) - calculateHeightIfBalanced(current -> getLeft());
-    while(isBalanced != true)
-    {
-        //find the source
-        while(abs(heightDif) > 1)
-        {
-            if(heightDif < 0)
-            {
-                current = current -> getLeft();
-            }
-            else
-            {
-                current = current -> getRight();
-            }
-            
-            heightDif = calculateHeightIfBalanced(current -> getRight()) - calculateHeightIfBalanced(current -> getLeft());
-        }
-        
-        //after source is found 
-    }*/
     
 }
 
