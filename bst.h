@@ -252,7 +252,7 @@ protected:
     void insertFix(Node<Key,Value>* p, Node<Key,Value>* n);
     void removeFix(Node<Key,Value>* n, int diff);
     void recursiveDelete(Node<Key,Value>* cur);
-    int calculateBalance(Node<Key,Value>* root);
+    int calculateHeight(Node<Key,Value>* root);
     void rotateRight(Node<Key,Value>* n);
     void rotateLeft(Node<Key,Value>* n);
 
@@ -576,6 +576,7 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::removeFix(Node<Key,Value>* n, int diff)
 {
     if(n == nullptr) return;
+    int balanceN = calculateHeight(n -> getRight()) - calculateHeight(n -> getLeft())
 
     Node<Key,Value>* p = n -> getParent();
     int ndiff = 0;
@@ -587,28 +588,83 @@ void BinarySearchTree<Key, Value>::removeFix(Node<Key,Value>* n, int diff)
         else ndiff = -1;
     }
 
-    //diff = -1
+    //diff = -1 means removed a right child
     if(diff == -1)
     {
-        if(calculateBalance(n) == 0)
+        if(balanceN == 0)
         {
             return;
         }
-        else if(calculateBalance(n) == 1)
+        else if(balanceN == 1)
         {
-            
+            removeFix(p, ndiff)
         }
         //-1
         else
         {
-
+            Node<Key,Value>* c;
+            //left will be taller since we removed from the right
+            c = n -> getLeft();
+            int balanceC = calculateHeight(c -> getRight()) - calculateHeight(c -> getLeft());
+            //zig-zig
+            if(balanceC == -1)
+            {
+                rotateRight(n);
+                removeFix(p,ndiff);
+            }
+            //zig-zig
+            else if(balanceC == 0)
+            {
+                rotateRight(n);
+                return;
+            }
+            //zig-zag
+            else
+            {
+                rotateLeft(c);
+                rotateRight(n);
+                removeFix(p,ndiff);
+            }
         }
     }
-
-    //diff = 1
+    //diff = 1 since removed from the left
     else
     {
-
+        if(calculateHeight(n) == 0)
+        {
+            return;
+        }
+        else if(calculateHeight(n) == -1)
+        {
+            removeFix(p, ndiff)
+        }
+        //1
+        else
+        {
+            Node<Key,Value>* c;
+            //right will be taller since we removed from the left
+            c = n -> getRight();
+            int balanceC = calculateHeight(c -> getRight()) - calculateHeight(c -> getLeft());
+            //zig-zig
+            if(balanceC == 1)
+            {
+                rotateLeft(n);
+                removeFix(p,ndiff);
+            }
+            //zig-zig
+            else if(balanceC == 0)
+            {
+                rotateLeft(n);
+                return;
+            }
+            //zig-zag
+            else
+            {
+                rotateRight(c);
+                rotateLeft(n);
+                removeFix(p,ndiff);
+            }
+        }
     }
 
 }
@@ -764,8 +820,8 @@ template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
-    int left = -1 * calculateBalance(root_ -> getLeft());
-    int right = calculateBalance(root_ -> getRight());
+    int left = -1 * calculateHeight(root_ -> getLeft());
+    int right = calculateHeight(root_ -> getRight());
     
     if(abs(left + right) > 1) return false;
     return true;
@@ -773,11 +829,11 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 }
 
 template<typename Key, typename Value>
-int BinarySearchTree<Key,Value>::calculateBalance(Node<Key,Value>* root){
+int BinarySearchTree<Key,Value>::calculateHeight(Node<Key,Value>* root){
 	if (root == nullptr) return 0;
 	
-	int right = calculateBalance(root -> getRight);
-	int left = calculateBalance(root -> getLeft());
+	int right = calculateHeight(root -> getRight);
+	int left = calculateHeight(root -> getLeft());
 	
     return max(right,left) + 1;
 }
@@ -791,7 +847,7 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
     //if p is the left child
     if(p -> getKey() < g -> getKey())
     {
-        int gBalance = calculateBalance(g);
+        int gBalance = calculateHeight(g);
         //balance = 0
         if(gBalance == 0) return;
         //balance = -1
@@ -810,7 +866,7 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
     //must be right child since know the child exists
     else
     {
-        int gBalance = calculateBalance(g);
+        int gBalance = calculateHeight(g);
         //balance = 0
         if(gBalance == 0) return;
         //balance = -1
