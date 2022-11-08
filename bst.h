@@ -821,8 +821,17 @@ template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
-    Node<Key,Value>* leftNode = root_ -> getLeft();
-    Node<Key,Value>* rightNode = root_ -> getRight();
+    Node<Key,Value>* leftNode = nullptr;
+    Node<Key,Value>* rightNode = nullptr;
+
+    if(root_ -> getLeft() != nullptr)
+    {
+        leftNode = root_ -> getLeft();
+    }
+    if(root_ -> getRight() != nullptr)
+    {
+        root_ -> getRight();
+    }
     int left = -1 * (calculateHeight(leftNode));
     int right = calculateHeight(rightNode);
     
