@@ -880,6 +880,7 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
             {
                 rotateLeft(p);
             }
+            p = g -> getLeft();
             rotateRight(g);
         }
     }
