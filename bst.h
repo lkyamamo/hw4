@@ -858,7 +858,7 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
     if(p == nullptr) return;
     else if(p -> getParent() == nullptr)
     {
-        root_ = p;
+        //root_ = p;
         return;
     }
     Node<Key,Value>* g = p -> getParent();
@@ -902,6 +902,7 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
         }
     }
     
+    if(p -> getParent() == nullptr) root_ = p;
 }
 
 template<typename Key, typename Value>
