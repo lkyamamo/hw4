@@ -909,11 +909,11 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key,Value>::rotateRight(Node<Key,Value>* n)
 {
     Node<Key,Value>* tempLeft = n -> getLeft();
-
+    //make left parent the current parent
+    tempLeft -> setParent(n -> getParent());
     if(n -> getParent() != nullptr)
     {
-        //make left parent the current parent
-        tempLeft -> setParent(n -> getParent());
+        
         //make the child of the parent the left node
         if (n -> getKey() > n -> getParent() -> getKey())
         {
@@ -939,11 +939,11 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key,Value>::rotateLeft(Node<Key,Value>* n)
 {
     Node<Key,Value>* tempRight = n -> getRight();
-
+    //make right parent the current parent
+    tempRight -> setParent(n -> getParent());
     if(n -> getParent() != nullptr)
     {
-        //make right parent the current parent
-        tempRight -> setParent(n -> getParent());
+        
         //make the child of the parent the right node
         if (n -> getKey() > n -> getParent() -> getKey())
         {
