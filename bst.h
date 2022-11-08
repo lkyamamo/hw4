@@ -318,7 +318,7 @@ BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
-    if(current_ -> getKey() == rhs.current_ -> getKey())
+    if(current_ == rhs.current_)
     {
         return true;
     }
@@ -335,7 +335,7 @@ BinarySearchTree<Key, Value>::iterator::operator!=(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
-    if(this -> current_ -> getKey() != rhs.current_ -> getKey())
+    if(current_ != rhs.current_)
     {
         return true;
     }
@@ -482,13 +482,13 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
     BinarySearchTree<Key,Value>::iterator it = root_;
     while(it.current_ -> getLeft() != nullptr && it.current_ -> getRight() != nullptr)
     {
-        if(it.current_ -> getKey() == keyValuePair.first)
+        if(it -> first == keyValuePair.first)
         {
             it.current_ -> setValue(keyValuePair.second);
             break;
         }
         //go right
-        else if(keyValuePair.first > it.current_ -> getKey())
+        else if(keyValuePair.first > it -> first)
         {
             it.current_ = it.current_ -> getRight();
         }
@@ -500,13 +500,13 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
     }
 
     //set right
-    if(keyValuePair.first > it.current_ -> getKey())
+    if(keyValuePair.first > it -> first)
     {
         temp -> setParent(it.current_);
         it.current_ -> setRight(temp);
     }
     //set left
-    else if(keyValuePair.first < it.current_ -> getKey())
+    else if(keyValuePair.first < it -> first)
     {
         temp -> setParent(it.current_);
         it.current_ -> setLeft(temp);
@@ -533,10 +533,13 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     BinarySearchTree::iterator it(root_);
     while(it != end())
     {
-        if(it.current_ -> getKey() == key)
+        if(it -> first == key)
         {
             break;
         }
+
+        if(key > it -> first) it.current_ = it.current_ -> getRight();
+        else it.current_ = it.current_ -> getLeft();
     }
 
     //if it wasn't found
@@ -548,13 +551,13 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     if(p != nullptr)
     {
         //left child
-        if(it.current_ -> getKey() < p -> getKey()) diff = 1;
+        if(it -> first < p -> getKey()) diff = 1;
         //right child
         else diff = -1;
     }
 
     //right child
-    if(it.current_ -> getKey() > it.current_ -> getParent() -> getKey())
+    if(it -> first > it.current_ -> getParent() -> getKey())
     {
         it.current_ -> getParent() -> setRight(nullptr);
         delete it.current_;
@@ -774,12 +777,13 @@ Node<Key, Value>*
 BinarySearchTree<Key, Value>::getSmallestNode() const
 {
     // TODO
-    Node<Key,Value>* temp = root_;
-    while(temp -> getLeft() != nullptr)
+    BinarySearchTree<Key,Value>::iterator it(root_);
+    while(it != nullptr)
     {
-        temp = temp -> getLeft();
+        if(it.current_ -> getLeft() == nullptr) break;
+        it.current_ = it.current_ -> getLeft();
     }
-    return temp;
+    return it.current_;
 }
 
 /**
@@ -794,7 +798,7 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
     BinarySearchTree<Key,Value>::iterator it(root_);
     while( it.current_ != nullptr )
     {
-        if(it.current_ -> getKey() == key)
+        if(it -> first == key)
         {
             return it.current_;
         }
@@ -831,8 +835,18 @@ template<typename Key, typename Value>
 int BinarySearchTree<Key,Value>::calculateHeight(const Node<Key,Value>* root) const{
 	if (root == nullptr) return 0;
 	
-	Node<Key,Value>* leftNode = root_ -> getLeft();
-    Node<Key,Value>* rightNode = root_ -> getRight();
+    Node<Key,Value>* leftNode = nullptr;
+    Node<Key,Value>* rightNode = nullptr;
+
+    if(root_ -> getLeft() != nullptr)
+    {
+        leftNode = root_ -> getLeft();
+    }
+    if(root_ -> getRight() != nullptr)
+    {
+        root_ -> getRight();
+    }
+
     int left = calculateHeight(leftNode);
     int right = calculateHeight(rightNode);
 	
