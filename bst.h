@@ -515,7 +515,7 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
     //if not balanced
     if(!isBalanced())
     {
-        insertFix(it.current_ -> getParent(), it.current_);
+        insertFix(it.current_, temp);
     }
 }
 
