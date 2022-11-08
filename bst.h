@@ -866,7 +866,8 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
     //if p is the left child
     if(p -> getKey() < g -> getKey())
     {
-        int gBalance = calculateHeight(g);
+        Node<Key,Value>* temp = g -> getRight();
+        int gBalance = calculateHeight(temp) - calculateHeight(p);
         //balance = 0
         if(gBalance == 0) return;
         //balance = -1
@@ -885,12 +886,13 @@ void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>*
     //must be right child since know the child exists
     else
     {
-        int gBalance = calculateHeight(g);
+        Node<Key,Value>* temp = g -> getLeft();
+        int gBalance = calculateHeight(p) - calculateHeight(temp);
         //balance = 0
         if(gBalance == 0) return;
-        //balance = -1
-        else if(gBalance == -1) insertFix(g,p);
-        //balance = -2
+        //balance = 1
+        else if(gBalance == 1) insertFix(g,p);
+        //balance = 2
         else
         {
             //zig zag cases
