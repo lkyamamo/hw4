@@ -474,23 +474,51 @@ Value const & BinarySearchTree<Key, Value>::operator[](const Key& key) const
 template<class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
+    Node<Key,Value>* temp = new Node<Key,Value>(keyValuePair.first, keyValuePair.second, nullptr);
     //if tree empty
     if(root_ == nullptr){
         root_ = new Node<Key, Value>(keyValuePair.first(), keyValuePair.second(), nullptr);
         return true;
     }
 
+    //find leaf node
     BinarySearchTree<Key,Value>::iterator it = root_;
-    while(it != nullptr)
+    while(it.current_ -> getLeft() != nullptr && it.current_ -> getRight() != nullptr)
     {
-        
+        if(*it -> first == keyValuePair.first)
+        {
+            it.current_ -> setValue(keyValuePair.second);
+            break;
+        }
+        //go right
+        else if(keyValuePair.first > *it -> first)
+        {
+            it.current_ = it.current_ -> getRight();
+        }
+        //go left
+        else
+        {
+            it.current_ = it.current_ -> getLeft();
+        }
+    }
+
+    //set right
+    if(keyValuePair.first > *it -> first)
+    {
+        temp -> setParent(it.current_);
+        it.current_ -> setRight(temp);
+    }
+    //set left
+    else if(keyValuePair.first < *it -> first)
+    {
+        temp -> setParent(it.current_);
+        it.current_ -> setLeft(temp);
     }
 
     //if not balanced
     if(!isBalanced())
     {
-        
-
+        insertFix(it.current_ -> getParent(), it.current_);
     }
 }
 
@@ -541,7 +569,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
         delete it.current_;
     }
 
-    removeFix(p,diff);
+    if(! isBalanced()) removeFix(p,diff);
 }
 
 template<typename Key, typename Value>
@@ -559,23 +587,25 @@ void BinarySearchTree<Key, Value>::removeFix(Node<Key,Value>* n, int diff)
         else ndiff = -1;
     }
 
-    if(calculateBalance(n) + diff == -2)
+    //diff = -1
+    if(diff == -1)
     {
-        
-    }
-    else if(calculateBalance(n) + diff == -1)
-    {
-        
-    }
-    else if(calculateBalance(n) + diff == 0)
-    {
+        if(calculateBalance(n) == 0)
+        {
+            return;
+        }
+        else if(calculateBalance(n) == 1)
+        {
+            
+        }
+        //-1
+        else
+        {
 
+        }
     }
-    else if(calculateBalance(n) + diff == 1)
-    {
 
-    }
-    // b(n) + diff == 2
+    //diff = 1
     else
     {
 
