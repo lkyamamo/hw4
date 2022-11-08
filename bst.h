@@ -249,9 +249,12 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
 
     // Add helper functions here
-    void balance();
+    void insertFix(Node<Key,Value>* p, Node<Key,Value>* n);
+    void removeFix(Node<Key,Value>* n, int diff);
     void recursiveDelete(Node<Key,Value>* cur);
-    int calculateHeightIfBalanced(Node<Key,Value>* root);
+    int calculateBalance(Node<Key,Value>* root);
+    void rotateRight(Node<Key,Value>* n);
+    void rotateLeft(Node<Key,Value>* n);
 
 protected:
     Node<Key, Value>* root_;
@@ -501,9 +504,84 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::remove(const Key& key)
 {
     // TODO
+    //find the node we are looking for
+    BinarySearchTree::iterator it(root_);
+    while(it != end())
+    {
+        if(it == key)
+        {
+            break;
+        }
+    }
+
+    //if it wasn't found
+    if(it == end()) return;
+    
+    nodeSwap(it.current_, predecessor(it.current_));
+    Node<Key,Value>* p = it.current_ -> getParent();
+    int diff = 0;
+    if(p != nullptr)
+    {
+        //left child
+        if(*it -> first() < p -> getKey()) diff = 1;
+        //right child
+        else diff = -1;
+    }
+
+    //right child
+    if(*it -> first() > it.current_ -> getParent())
+    {
+        it.current_ -> getParent() -> setRight(nullptr);
+        delete it.current_;
+    }
+    //left child
+    else
+    {
+        it.current_ -> getParent() -> setLeft(nullptr);
+        delete it.current_;
+    }
+
+    removeFix(p,diff);
 }
 
+template<typename Key, typename Value>
+void BinarySearchTree<Key, Value>::removeFix(Node<Key,Value>* n, int diff)
+{
+    if(n == nullptr) return;
 
+    Node<Key,Value>* p = n -> getParent();
+    int ndiff = 0;
+    if(p != nullptr)
+    {
+        //left child
+        if(n -> getKey() < p -> getKey()) ndiff = 1;
+        //right child
+        else ndiff = -1;
+    }
+
+    if(calculateBalance(n) + diff == -2)
+    {
+        
+    }
+    else if(calculateBalance(n) + diff == -1)
+    {
+        
+    }
+    else if(calculateBalance(n) + diff == 0)
+    {
+
+    }
+    else if(calculateBalance(n) + diff == 1)
+    {
+
+    }
+    // b(n) + diff == 2
+    else
+    {
+
+    }
+
+}
 
 template<class Key, class Value>
 Node<Key, Value>*
@@ -656,8 +734,8 @@ template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
-    int left = -1 * calculateHeightIfBalanced(root_ -> getLeft());
-    int right = calculateHeightIfBalanced(root_ -> getRight());
+    int left = -1 * calculateBalance(root_ -> getLeft());
+    int right = calculateBalance(root_ -> getRight());
     
     if(abs(left + right) > 1) return false;
     return true;
@@ -665,23 +743,65 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 }
 
 template<typename Key, typename Value>
-int BinarySearchTree<Key,Value>::calculateHeightIfBalanced(Node<Key,Value>* root){
+int BinarySearchTree<Key,Value>::calculateBalance(Node<Key,Value>* root){
 	if (root == nullptr) return 0;
 	
-	int right = calculateHeightIfBalanced(root -> getRight);
-	int left = calculateHeightIfBalanced(root -> getLeft());
+	int right = calculateBalance(root -> getRight);
+	int left = calculateBalance(root -> getLeft());
 	
     return max(right,left) + 1;
 }
 
 template<typename Key, typename Value>
-void BinarySearchTree<Key,Value>::balance()
+void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>* n)
 {
-    //find the source
-    Node<Key,Value>* current = root_;
+    if(p == nullptr || p -> getParent() == nullptr) return;
+    Node<Key,Value>* g = p -> getParent();
+
+    //if p is the left child
+    if(p -> getKey() < g -> getKey())
+    {
+        int gBalance = calculateBalance(g);
+        //balance = 0
+        if(gBalance == 0) return;
+        //balance = -1
+        else if(gBalance == -1) insertFix(g,p);
+        //balance = -2
+        else
+        {
+            //zig zag cases
+            if(n -> getKey() > p -> getKey())
+            {
+                rotateLeft(p);
+            }
+            rotateRight(g);
+        }
+    }
+    //must be right child since know the child exists
+    else
+    {
+        int gBalance = calculateBalance(g);
+        //balance = 0
+        if(gBalance == 0) return;
+        //balance = -1
+        else if(gBalance == -1) insertFix(g,p);
+        //balance = -2
+        else
+        {
+            //zig zag cases
+            if(n -> getKey() < p -> getKey())
+            {
+                rotateRight(p);
+            }
+            rotateLeft(g);
+        }
+    }
+
+    /*Node<Key,Value>* current = root_;
     int heightDif = calculateHeightIfBalanced(current -> getRight()) - calculateHeightIfBalanced(current -> getLeft());
     while(isBalanced != true)
     {
+        //find the source
         while(abs(heightDif) > 1)
         {
             if(heightDif < 0)
@@ -696,7 +816,69 @@ void BinarySearchTree<Key,Value>::balance()
             heightDif = calculateHeightIfBalanced(current -> getRight()) - calculateHeightIfBalanced(current -> getLeft());
         }
         
+        //after source is found 
+    }*/
+    
+}
+
+template<typename Key, typename Value>
+void BinarySearchTree<Key,Value>::rotateRight(Node<Key,Value>* n)
+{
+    Node<Key,Value>* tempLeft = n -> getLeft();
+
+    if(n -> getParent() != nullptr)
+    {
+        //make left parent the current parent
+        tempLeft -> setParent(n -> getParent());
+        //make the child of the parent the left node
+        if (n -> getKey() > n -> getParent() -> getKey())
+        {
+            //true if right child
+            tempLeft -> getParent() -> setRight(tempLeft);
+        }
+        else
+        {
+            //true if left child
+            tempLeft -> getParent() -> setLeft(tempLeft);
+        }
     }
+    
+    //make the left of current the right of the left
+    n -> setLeft(tempLeft -> getRight());
+    //make the right the current
+    tempLeft -> setRight(n);
+    //set the parent to the left
+    n -> setParent(tempLeft);
+}
+
+template<typename Key, typename Value>
+void BinarySearchTree<Key,Value>::rotateLeft(Node<Key,Value>* n)
+{
+    Node<Key,Value>* tempRight = n -> getRight();
+
+    if(n -> getParent() != nullptr)
+    {
+        //make left parent the current parent
+        tempLeft -> setParent(n -> getParent());
+        //make the child of the parent the left node
+        if (n -> getKey() > n -> getParent() -> getKey())
+        {
+            //true if right child
+            tempLeft -> getParent() -> setRight(tempRight);
+        }
+        else
+        {
+            //true if left child
+            tempLeft -> getParent() -> setLeft(tempRight);
+        }
+    }
+    
+    //make the right of current the left of the right
+    n -> setRight(tempRight -> getLeft());
+    //make left the current
+    tempRight -> setLeft(n);
+    //set the parent to the left
+    n -> setParent(tempRight);
 }
 
 template<typename Key, typename Value>
