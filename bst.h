@@ -467,10 +467,10 @@ Value const & BinarySearchTree<Key, Value>::operator[](const Key& key) const
 template<class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
-    std::cout << keyValuePair.first << " ";
+    
     Node<Key,Value>* temp = new Node<Key,Value>(keyValuePair.first, keyValuePair.second, nullptr);
     //if tree empty
-    if(root_ == nullptr){
+    if(begin() == nullptr){
         root_ = temp;
         return;
     }
@@ -512,7 +512,7 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         temp -> setParent(p);
         p -> setLeft(temp);
     }
-    std::cout << temp -> getKey() << std:: endl;
+    
 }
 
 
@@ -641,9 +641,8 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
 template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::clear()
 {
-    std::cout << "start clear function" << std::endl;
     recursiveDelete(root_);
-    std::cout << "finish clear function" << std::endl;
+    root_ = nullptr;
 }
 
 template<typename Key, typename Value>
@@ -656,7 +655,10 @@ void BinarySearchTree<Key, Value>::recursiveDelete(Node<Key,Value>* cur)
 
     recursiveDelete(cur -> getLeft());
     recursiveDelete(cur -> getRight());
+    cur -> setLeft(nullptr);
+    cur -> setRight(nullptr);
     delete cur;
+    cur = nullptr;
 }
 
 /**
