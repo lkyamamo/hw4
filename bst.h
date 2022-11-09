@@ -502,14 +502,14 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
     //set right
     if(keyValuePair.first > p -> getKey())
     {
-        temp -> setParent(it.current_);
-        it.current_ -> setRight(temp);
+        temp -> setParent(p);
+        p -> setRight(temp);
     }
     //set left
     else if(keyValuePair.first < p -> getKey())
     {
-        temp -> setParent(it.current_);
-        it.current_ -> setLeft(temp);
+        temp -> setParent(p);
+        p -> setLeft(temp);
     }
 
 }
