@@ -476,7 +476,8 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 
     //find leaf node
     BinarySearchTree<Key,Value>::iterator it = root_;
-    while(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr)
+    Node<Key,Value>* p;
+    while(it != end())
     {
         if(it -> first == keyValuePair.first)
         {
@@ -493,16 +494,19 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         {
             it.current_ = it.current_ -> getLeft();
         }
+        p = it.current_ -> getParent();
     }
 
+    if(it == end()) return;
+
     //set right
-    if(keyValuePair.first > it -> first)
+    if(keyValuePair.first > p -> getKey())
     {
         temp -> setParent(it.current_);
         it.current_ -> setRight(temp);
     }
     //set left
-    else if(keyValuePair.first < it -> first)
+    else if(keyValuePair.first < p -> getKey())
     {
         temp -> setParent(it.current_);
         it.current_ -> setLeft(temp);
