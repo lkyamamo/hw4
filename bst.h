@@ -643,6 +643,7 @@ void BinarySearchTree<Key, Value>::clear()
 {
     std::cout << "start clear function" << std::endl;
     recursiveDelete(root_);
+    std::cout << "finish clear function" << std::endl;
 }
 
 template<typename Key, typename Value>
