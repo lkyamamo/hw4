@@ -641,6 +641,7 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
 template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::clear()
 {
+    std::cout << "start clear function" << std::endl;
     recursiveDelete(root_);
 }
 
