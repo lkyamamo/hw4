@@ -511,7 +511,7 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         temp -> setParent(p);
         p -> setLeft(temp);
     }
-
+    std::cout << temp -> getKey() << std:: endl;
 }
 
 
