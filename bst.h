@@ -250,12 +250,8 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
 
     // Add helper functions here
-    void insertFix(Node<Key,Value>* p, Node<Key,Value>* n);
-    void removeFix(Node<Key,Value>* n, int diff);
     void recursiveDelete(Node<Key,Value>* cur);
     int calculateHeight(const Node<Key,Value>* root) const;
-    void rotateRight(Node<Key,Value>* n);
-    void rotateLeft(Node<Key,Value>* n);
 
 protected:
     Node<Key, Value>* root_;
@@ -512,11 +508,6 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         it.current_ -> setLeft(temp);
     }
 
-    //if not balanced
-    if(!isBalanced())
-    {
-        insertFix(it.current_, temp);
-    }
 }
 
 
@@ -545,128 +536,18 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     //if it wasn't found
     if(it == end()) return;
     
+    //this is the parent of the previous predecessor
+    Node<Key,Value>* p = predecessor(it.current_) -> getParent();
+    int child = 0;
+    if(predecessor(it.current_) -> getKey() > p -> getKey()) child = 1;
+    else child = -1;
+    
     nodeSwap(it.current_, predecessor(it.current_));
-    Node<Key,Value>* p = it.current_ -> getParent();
-    int diff = 0;
-    if(p != nullptr)
-    {
-        //left child
-        if(it -> first < p -> getKey()) diff = 1;
-        //right child
-        else diff = -1;
-    }
-
-    //right child
-    if(it -> first > it.current_ -> getParent() -> getKey())
-    {
-        it.current_ -> getParent() -> setRight(nullptr);
-        delete it.current_;
-    }
-    //left child
-    else
-    {
-        it.current_ -> getParent() -> setLeft(nullptr);
-        delete it.current_;
-    }
-
-    if(! isBalanced()) removeFix(p,diff);
-}
-
-template<typename Key, typename Value>
-void BinarySearchTree<Key, Value>::removeFix(Node<Key,Value>* n, int diff)
-{
-    if(n == nullptr) return;
-    int balanceN = calculateHeight(n -> getRight()) - calculateHeight(n -> getLeft());
-
-    Node<Key,Value>* p = n -> getParent();
-    int ndiff = 0;
-    if(p != nullptr)
-    {
-        //left child
-        if(n -> getKey() < p -> getKey()) ndiff = 1;
-        //right child
-        else ndiff = -1;
-    }
-
-    //diff = -1 means removed a right child
-    if(diff == -1)
-    {
-        if(balanceN == 0)
-        {
-            return;
-        }
-        else if(balanceN == 1)
-        {
-            removeFix(p, ndiff);
-        }
-        //-1
-        else
-        {
-            Node<Key,Value>* c;
-            //left will be taller since we removed from the right
-            c = n -> getLeft();
-            int balanceC = calculateHeight(c -> getRight()) - calculateHeight(c -> getLeft());
-            //zig-zig
-            if(balanceC == -1)
-            {
-                rotateRight(n);
-                removeFix(p,ndiff);
-            }
-            //zig-zig
-            else if(balanceC == 0)
-            {
-                rotateRight(n);
-                return;
-            }
-            //zig-zag
-            else
-            {
-                rotateLeft(c);
-                rotateRight(n);
-                removeFix(p,ndiff);
-            }
-        }
-    }
-    //diff = 1 since removed from the left
-    else
-    {
-        if(calculateHeight(n) == 0)
-        {
-            return;
-        }
-        else if(calculateHeight(n) == -1)
-        {
-            removeFix(p, ndiff);
-        }
-        //1
-        else
-        {
-            Node<Key,Value>* c;
-            //right will be taller since we removed from the left
-            c = n -> getRight();
-            int balanceC = calculateHeight(c -> getRight()) - calculateHeight(c -> getLeft());
-            //zig-zig
-            if(balanceC == 1)
-            {
-                rotateLeft(n);
-                removeFix(p,ndiff);
-            }
-            //zig-zig
-            else if(balanceC == 0)
-            {
-                rotateLeft(n);
-                return;
-            }
-            //zig-zag
-            else
-            {
-                rotateRight(c);
-                rotateLeft(n);
-                removeFix(p,ndiff);
-            }
-        }
-    }
-
+    delete it.current_;
+    if(child == 1) p -> setRight(nullptr);
+    else p -> setLeft(nullptr);
+    
+    
 }
 
 template<class Key, class Value>
@@ -850,123 +731,6 @@ int BinarySearchTree<Key,Value>::calculateHeight(const Node<Key,Value>* n) const
     int right = calculateHeight(rightNode);
 	
     return std::max(left,right) + 1;
-}
-
-template<typename Key, typename Value>
-void BinarySearchTree<Key,Value>::insertFix(Node<Key,Value>* p, Node<Key,Value>* n)
-{
-    if(p == nullptr) return;
-    else if(p -> getParent() == nullptr)
-    {
-        //root_ = p;
-        return;
-    }
-    Node<Key,Value>* g = p -> getParent();
-
-    //if p is the left child
-    if(p -> getKey() < g -> getKey())
-    {
-        Node<Key,Value>* temp = g -> getRight();
-        int gBalance = calculateHeight(temp) - calculateHeight(p);
-        //balance = 0
-        if(gBalance == 0) return;
-        //balance = -1
-        else if(gBalance == -1) insertFix(g,p);
-        //balance = -2
-        else
-        {
-            //zig zag cases
-            if(n -> getKey() > p -> getKey())
-            {
-                rotateLeft(p);
-            }
-            p = g -> getLeft();
-            rotateRight(g);
-        }
-    }
-    //must be right child since know the child exists
-    else
-    {
-        Node<Key,Value>* temp = g -> getLeft();
-        int gBalance = calculateHeight(p) - calculateHeight(temp);
-        //balance = 0
-        if(gBalance == 0) return;
-        //balance = 1
-        else if(gBalance == 1) insertFix(g,p);
-        //balance = 2
-        else
-        {
-            //zig zag cases
-            if(n -> getKey() < p -> getKey())
-            {
-                rotateRight(p);
-            }
-            p = g -> getRight();
-            rotateLeft(g);
-        }
-    }
-    
-    if(p -> getParent() == nullptr) root_ = p;
-}
-
-template<typename Key, typename Value>
-void BinarySearchTree<Key,Value>::rotateRight(Node<Key,Value>* n)
-{
-    Node<Key,Value>* tempLeft = n -> getLeft();
-    //make left parent the current parent
-    tempLeft -> setParent(n -> getParent());
-    if(n -> getParent() != nullptr)
-    {
-        
-        //make the child of the parent the left node
-        if (n -> getKey() > n -> getParent() -> getKey())
-        {
-            //true if right child
-            tempLeft -> getParent() -> setRight(tempLeft);
-        }
-        else
-        {
-            //true if left child
-            tempLeft -> getParent() -> setLeft(tempLeft);
-        }
-    }
-    
-    //make the left of current the right of the left
-    n -> setLeft(tempLeft -> getRight());
-    //make the right the current
-    tempLeft -> setRight(n);
-    //set the parent to the left
-    n -> setParent(tempLeft);
-}
-
-template<typename Key, typename Value>
-void BinarySearchTree<Key,Value>::rotateLeft(Node<Key,Value>* n)
-{
-    Node<Key,Value>* tempRight = n -> getRight();
-    //make right parent the current parent
-    tempRight -> setParent(n -> getParent());
-    if(n -> getParent() != nullptr)
-    {
-        
-        //make the child of the parent the right node
-        if (n -> getKey() > n -> getParent() -> getKey())
-        {
-            //true if right child
-            tempRight -> getParent() -> setRight(tempRight);
-        }
-        else
-        {
-            //true if left child
-            tempRight -> getParent() -> setLeft(tempRight);
-        }
-    }
-    
-    //make the right of current the left of the right
-    n -> setRight(tempRight -> getLeft());
-    //make left the current
-    tempRight -> setLeft(n);
-    //set the parent to the left
-    n -> setParent(tempRight);
 }
 
 template<typename Key, typename Value>
