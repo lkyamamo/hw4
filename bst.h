@@ -535,6 +535,8 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 
     //if it wasn't found
     if(it == end()) return;
+
+    if(predecessor(it.current_) == nullptr) return;
     
     //this is the parent of the previous predecessor
     Node<Key,Value>* p = predecessor(it.current_) -> getParent();
