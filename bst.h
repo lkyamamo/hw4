@@ -526,6 +526,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 {
     // TODO
     //find the node we are looking for
+    int child = 0;
     BinarySearchTree::iterator it(root_);
     while(it != end())
     {
@@ -533,28 +534,106 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
         {
             break;
         }
-
-        if(key > it -> first) it.current_ = it.current_ -> getRight();
-        else it.current_ = it.current_ -> getLeft();
+        //a right child
+        if(key > it -> first) 
+        {
+            it.current_ = it.current_ -> getRight();
+            child = 1;
+        }
+        //a left child
+        else 
+        {
+            it.current_ = it.current_ -> getLeft();
+            child = -1;
+        }
     }
+    //it will be the node we are removing or null
 
-    //if it wasn't found
+    //if it is null then the node does not exist
     if(it == end()) return;
 
-    if(predecessor(it.current_) == nullptr) return;
-    
-    //this is the parent of the previous predecessor
-    Node<Key,Value>* p = predecessor(it.current_) -> getParent();
-    int child = 0;
-    if(predecessor(it.current_) -> getKey() > p -> getKey()) child = 1;
-    else child = -1;
-    
-    nodeSwap(it.current_, predecessor(it.current_));
-    delete it.current_;
-    if(child == 1) p -> setRight(nullptr);
-    else p -> setLeft(nullptr);
-    
-    
+    //we found it
+    //0 children
+    Node<Key,Value>* p = it.current_ -> getParent();
+    if(it.current_ -> getLeft() == nullptr && it.current_ -> getRight() == nullptr)
+    {
+        //set the location of the child to null and delete
+
+        //if there is no parent it is the root node
+        if(child == 0)
+        {
+            root_ = nullptr;
+        }
+        //
+        else if(child == 1)
+        {
+            p -> setRight(nullptr);
+        }
+        else
+        {
+            p -> setLeft(nullptr);
+        }
+        delete it.current_;
+    }
+    //1 child
+    else if(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr)
+    {
+        //put child in current location
+        //its a left child
+        if(it.current_ -> getLeft() != nullptr)
+        {
+            //no parent
+            if(child == 0)
+            {
+                root_ = it.current_ -> getLeft();
+                it.current_ -> getLeft() -> setParent(nullptr);
+            }
+            //current is a right child
+            else if (child == 1)
+            {
+                p -> setRight(it.current_ -> getLeft());
+                it.current_ -> getLeft() -> setParent(it.current_ -> getParent());
+            }
+            //current is a left child
+            else
+            {
+                p -> setLeft(it.current_ -> getLeft());
+                it.current_ -> getLeft() -> setParent(it.current_ -> getParent());
+            }
+        }
+        else
+        {
+            //no parent
+            if(child == 0)
+            {
+                root_ = it.current_ -> getRight();
+                it.current_ -> getRight() -> setParent(nullptr);
+            }
+            //current is a right child
+            else if (child == 1)
+            {
+                p -> setRight(it.current_ -> getRight());
+                it.current_ -> getRight() -> setParent(it.current_ -> getParent());
+            }
+            //current is a left child
+            else
+            {
+                p -> setLeft(it.current_ -> getRight());
+                it.current_ -> getRight() -> setParent(it.current_ -> getParent());
+            }
+        }
+        delete it.current_;
+    }
+    else
+    {
+        nodeSwap(it.current_, predecessor(it.current_));
+        //right child
+        if(key > p -> getKey()) p -> setRight(nullptr);
+        //left child
+        else p -> setLeft(nullptr);
+
+        delete it.current_;
+    }   
 }
 
 template<class Key, class Value>
