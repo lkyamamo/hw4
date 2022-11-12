@@ -553,26 +553,16 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     if(it == end()) return;
 
     //we found it
-    //0 children
+    //2 children
     Node<Key,Value>* p = it.current_ -> getParent();
-    if(it.current_ -> getLeft() == nullptr && it.current_ -> getRight() == nullptr)
+    if(it.current_ -> getLeft() != nullptr && it.current_ -> getRight() != nullptr)
     {
-        //set the location of the child to null and delete
+        nodeSwap(it.current_, predecessor(it.current_));
+        //right child
+        if(key > p -> getKey()) p -> setRight(nullptr);
+        //left child
+        else p -> setLeft(nullptr);
 
-        //if there is no parent it is the root node
-        if(child == 0)
-        {
-            root_ = nullptr;
-        }
-        //
-        else if(child == 1)
-        {
-            p -> setRight(nullptr);
-        }
-        else
-        {
-            p -> setLeft(nullptr);
-        }
         delete it.current_;
     }
     //1 child
@@ -624,14 +614,25 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
         }
         delete it.current_;
     }
+    //0 children
     else
     {
-        nodeSwap(it.current_, predecessor(it.current_));
-        //right child
-        if(key > p -> getKey()) p -> setRight(nullptr);
-        //left child
-        else p -> setLeft(nullptr);
+        //set the location of the child to null and delete
 
+        //if there is no parent it is the root node
+        if(child == 0)
+        {
+            root_ = nullptr;
+        }
+        //
+        else if(child == 1)
+        {
+            p -> setRight(nullptr);
+        }
+        else
+        {
+            p -> setLeft(nullptr);
+        }
         delete it.current_;
     }   
 }
