@@ -565,18 +565,15 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
             if(key > p -> getKey()) p -> setRight(nullptr);
             //left child
             else p -> setLeft(nullptr);
+
+            it.current_ -> getParent() -> setRight(nullptr);
         }
         else
         {
             root_ = pred;
+            it.current_ -> getParent() -> setLeft(nullptr);
         }
 
-        p = it.current_ -> getParent();
-        //a right child
-        if(it -> first > p -> getKey()) p -> setRight(nullptr);
-        //a left child
-        else p-> setLeft(nullptr);
-        
         delete it.current_;
     }
     //1 child
