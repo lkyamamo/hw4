@@ -837,7 +837,7 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
     }
     int left = -1 * (calculateHeight(leftNode));
     int right = calculateHeight(rightNode);
-    std::cout << "left: " << left << " right: "<< std::endl;
+    std::cout << "left: " << left << " right: "<< right << std::endl;
     if(abs(left + right) > 1) return false;
     return true;
 
