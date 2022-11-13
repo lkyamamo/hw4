@@ -138,7 +138,7 @@ protected:
     virtual void nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2);
 
     // Add helper functions here
-
+    void insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n);
 
 };
 
@@ -150,6 +150,55 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
     // TODO
+    AVLNode<Key,Value>* temp = new AVLNode<Key,Value>(new_item.first, new_item.second, nullptr);
+    temp -> setBalance(0);
+    //if tree empty
+    if(this -> root_ == nullptr){
+        this -> root_ = temp;
+    }
+    else
+    {
+        //find leaf node
+        typename BinarySearchTree<Key,Value>::iterator it = this -> root_;
+        while(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr)
+        {
+            if(it -> first == new_item.first)
+            {
+                it.current_ -> setValue(new_item.second);
+                break;
+            }
+            //go right
+            else if(new_item.first > it -> first)
+            {
+                it.current_ = it.current_ -> getRight();
+            }
+            //go left
+            else
+            {
+                it.current_ = it.current_ -> getLeft();
+            }
+        }
+
+        //set right
+        if(new_item.first > it -> first)
+        {
+            temp -> setParent(it.current_);
+            it.current_ -> setRight(temp);
+        }
+        //set left
+        else if(new_item.first < it -> first)
+        {
+            temp -> setParent(it.current_);
+            it.current_ -> setLeft(temp);
+        }
+
+        //if not balanced
+        if(it.current_ -> getParent() -> getBalance() == 0)
+        {
+            insertFix(it.current_, temp);
+        }
+    }
+    
 }
 
 /*
