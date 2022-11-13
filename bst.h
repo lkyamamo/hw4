@@ -251,7 +251,7 @@ protected:
 
     // Add helper functions here
     void recursiveDelete(Node<Key,Value>* cur);
-    int calculateHeight(const Node<Key,Value>* root) const;
+    int calculateHeightIfBalanced(const Node<Key,Value>* root) const;
     void removeHelper(Node<Key,Value>* current, int child);
 
 protected:
@@ -823,19 +823,19 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
     if(root_ == nullptr) return true;
-    if(calculateHeight(root_) == -1) return false;
+    if(calculateHeightIfBalanced(root_) == -1) return false;
     return true;
 
 }
 
 template<typename Key, typename Value>
-int BinarySearchTree<Key,Value>::calculateHeight(const Node<Key,Value>* n) const{
+int BinarySearchTree<Key,Value>::calculateHeightIfBalanced(const Node<Key,Value>* n) const{
 	if (n == nullptr) return 0;
 	
     Node<Key,Value>* leftNode = n -> getLeft();
     Node<Key,Value>* rightNode = n -> getRight();
-    int left = calculateHeight(leftNode);
-    int right = calculateHeight(rightNode);
+    int left = calculateHeightIfBalanced(leftNode);
+    int right = calculateHeightIfBalanced(rightNode);
 
     if(right == -1 || left == -1) return -1;
     else if(abs(right - left) > 1) return -1;
