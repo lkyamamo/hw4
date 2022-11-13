@@ -704,7 +704,7 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
         }
         return temp;
     }
-    // has a parent
+    // has a parent 
     else if(current -> getParent() != nullptr)
     {
         //left child
@@ -715,7 +715,16 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
         //right child
         else
         { 
-            return (current -> getParent() -> getParent());
+            Node<Key,Value>* temp = current;
+            while(temp -> getKey() > temp -> getParent() -> getKey())
+            {
+                temp = temp -> getParent();
+                if(temp -> getParent() == nullptr)
+                {
+                    return nullptr;
+                }
+            }
+            return temp -> getParent();
         }
     }
     //has no parent means it is the root node with no right child
