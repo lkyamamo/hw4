@@ -252,6 +252,7 @@ protected:
     // Add helper functions here
     void recursiveDelete(Node<Key,Value>* cur);
     int calculateHeight(const Node<Key,Value>* root) const;
+    void removeHelper(Node<Key,Value>* current);
 
 protected:
     Node<Key, Value>* root_;
@@ -553,8 +554,18 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     if(it == end()) return;
 
     //we found it
-    //2 children
+    removeHelper(it.current_);
+    delete it.current_;
+    
+}
+
+template<typename Key, typename Value>
+void BinarySearchTree<Key,Value>::removeHelper(Node<Key,Value>* current)
+{
+    BinarySearchTree::iterator it(current);
     Node<Key,Value>* p = it.current_ -> getParent();
+
+    //2 children
     if(it.current_ -> getLeft() != nullptr && it.current_ -> getRight() != nullptr)
     {
         Node<Key,Value>* pred = predecessor(it.current_);
@@ -565,10 +576,12 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
             root_ = pred;
         }
 
+        if(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr) removeHelper(it.current_);
+
         if(it.current_ -> getParent() == pred) pred -> setLeft(nullptr);
         else it.current_ -> getParent() -> setRight(nullptr);
 
-        delete it.current_;
+
     }
     //1 child
     else if(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr)
@@ -617,7 +630,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
                 it.current_ -> getRight() -> setParent(it.current_ -> getParent());
             }
         }
-        delete it.current_;
+
     }
     //0 children
     else
@@ -638,7 +651,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
         {
             p -> setLeft(nullptr);
         }
-        delete it.current_;
+
     }   
 }
 
