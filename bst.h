@@ -580,9 +580,12 @@ void BinarySearchTree<Key,Value>::removeHelper(Node<Key,Value>* current, int chi
         {
             removeHelper(it.current_,1);
         }
+        else{
+            if(it.current_ -> getParent() == pred) pred -> setLeft(nullptr);
+            else it.current_ -> getParent() -> setRight(nullptr);
+        }
 
-        if(it.current_ -> getParent() == pred) pred -> setLeft(nullptr);
-        else it.current_ -> getParent() -> setRight(nullptr);
+        
 
 
     }
