@@ -700,6 +700,7 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
         while(temp -> getLeft() != nullptr)
         {
             temp = temp -> getLeft();
+            std::cout << "go left" << std::endl;
         }
         return temp;
     }
