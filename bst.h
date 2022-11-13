@@ -252,7 +252,7 @@ protected:
     // Add helper functions here
     void recursiveDelete(Node<Key,Value>* cur);
     int calculateHeight(const Node<Key,Value>* root) const;
-    void removeHelper(Node<Key,Value>* current);
+    void removeHelper(Node<Key,Value>* current, int child);
 
 protected:
     Node<Key, Value>* root_;
@@ -554,13 +554,13 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     if(it == end()) return;
 
     //we found it
-    removeHelper(it.current_);
+    removeHelper(it.current_, child);
     delete it.current_;
     
 }
 
 template<typename Key, typename Value>
-void BinarySearchTree<Key,Value>::removeHelper(Node<Key,Value>* current)
+void BinarySearchTree<Key,Value>::removeHelper(Node<Key,Value>* current, int child)
 {
     BinarySearchTree::iterator it(current);
     Node<Key,Value>* p = it.current_ -> getParent();
