@@ -825,6 +825,8 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
     Node<Key,Value>* leftNode = nullptr;
     Node<Key,Value>* rightNode = nullptr;
 
+    if(root_ == nullptr) return true;
+
     if(root_ -> getLeft() != nullptr)
     {
         leftNode = root_ -> getLeft();
