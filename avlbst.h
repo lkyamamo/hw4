@@ -138,7 +138,8 @@ protected:
     virtual void nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2);
 
     // Add helper functions here
-    void insertFix(Node<Key,Value>* p, Node<Key,Value>* n);
+    void insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n);
+    AVLNode<Key,Value>* root_;
 
 };
 
@@ -149,18 +150,17 @@ protected:
 template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
-    Node<Key,Value>* &root = BinarySearchTree<Key,Value>::root_;
     // TODO
     AVLNode<Key,Value>* temp = new AVLNode<Key,Value>(new_item.first, new_item.second, nullptr);
     temp -> setBalance(0);
     //if tree empty
-    if(root == nullptr){
-        root = temp;
+    if(root_ == nullptr){
+        root_ = temp;
     }
     else
     {
         //find leaf node
-        Node<Key,Value>* current = root;
+        AVLNode<Key,Value>* current = root_;
         while(current -> getLeft() != nullptr || current -> getRight() != nullptr)
         {
             if(current -> getKey() == new_item.first)
@@ -202,6 +202,12 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
     
 }
 
+template<class Key, class Value>
+void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
+{
+
+}
+
 /*
  * Recall: The writeup specifies that if a node has 2 children you
  * should swap with the predecessor and then remove.
@@ -210,6 +216,7 @@ template<class Key, class Value>
 void AVLTree<Key, Value>:: remove(const Key& key)
 {
     // TODO
+    
 }
 
 template<class Key, class Value>
