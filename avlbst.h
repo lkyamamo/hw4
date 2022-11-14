@@ -149,18 +149,18 @@ protected:
 template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
-    std::cout << root_ << std::endl;
+    Node<Key,Value>* &root = typename BinarySearchTree<Key,Value>::root_;
     // TODO
     AVLNode<Key,Value>* temp = new AVLNode<Key,Value>(new_item.first, new_item.second, nullptr);
     temp -> setBalance(0);
     //if tree empty
-    if(this -> root_ == nullptr){
-        this -> root_ = temp;
+    if(root == nullptr){
+        root = temp;
     }
     else
     {
         //find leaf node
-        typename BinarySearchTree<Key,Value>::iterator it = this -> root_;
+        typename BinarySearchTree<Key,Value>::iterator it = root;
         while(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr)
         {
             if(it -> first == new_item.first)
@@ -213,7 +213,7 @@ void AVLTree<Key, Value>:: remove(const Key& key)
 }
 
 template<class Key, class Value>
-void AVLTree<Key, Value>::nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2)
+void AVLTree<Key, Value>::nodeSwap(AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2)
 {
     BinarySearchTree<Key, Value>::nodeSwap(n1, n2);
     int8_t tempB = n1->getBalance();
