@@ -138,7 +138,7 @@ protected:
     virtual void nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2);
 
     // Add helper functions here
-    void insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n);
+    void insertFix(Node<Key,Value>* p, Node<Key,Value>* n);
 
 };
 
@@ -160,7 +160,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
     else
     {
         //find leaf node
-        AVLNode<Key,Value>* current = root;
+        Node<Key,Value>* current = root;
         while(current -> getLeft() != nullptr || current -> getRight() != nullptr)
         {
             if(current -> getKey() == new_item.first)
@@ -169,7 +169,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
                 break;
             }
             //go right
-            else if(new_item.first > it -> first)
+            else if(new_item.first > current -> getKey())
             {
                 current = current -> getRight();
             }
