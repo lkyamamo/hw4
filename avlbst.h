@@ -163,7 +163,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
         AVLNode<Key,Value>* current = root;
         while(current -> getLeft() != nullptr || current -> getRight() != nullptr)
         {
-            if(it -> first == new_item.first)
+            if(current -> getKey() == new_item.first)
             {
                 current -> setValue(new_item.second);
                 break;
@@ -181,13 +181,13 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
         }
 
         //set right
-        if(new_item.first > it -> first)
+        if(new_item.first > current -> getKey())
         {
             temp -> setParent(current);
             current -> setRight(temp);
         }
         //set left
-        else if(new_item.first < it -> first)
+        else if(new_item.first < current -> getKey())
         {
             temp -> setParent(current);
             current -> setLeft(temp);
