@@ -149,7 +149,7 @@ protected:
 template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
-    Node<Key,Value>* &root = typename BinarySearchTree<Key,Value>::root_;
+    Node<Key,Value>* &root = BinarySearchTree<Key,Value>::root_;
     // TODO
     AVLNode<Key,Value>* temp = new AVLNode<Key,Value>(new_item.first, new_item.second, nullptr);
     temp -> setBalance(0);
