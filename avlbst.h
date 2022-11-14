@@ -160,43 +160,43 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
     else
     {
         //find leaf node
-        typename BinarySearchTree<Key,Value>::iterator it = root;
-        while(it.current_ -> getLeft() != nullptr || it.current_ -> getRight() != nullptr)
+        AVLNode<Key,Value>* current = root;
+        while(current -> getLeft() != nullptr || current -> getRight() != nullptr)
         {
             if(it -> first == new_item.first)
             {
-                it.current_ -> setValue(new_item.second);
+                current -> setValue(new_item.second);
                 break;
             }
             //go right
             else if(new_item.first > it -> first)
             {
-                it.current_ = it.current_ -> getRight();
+                current = current -> getRight();
             }
             //go left
             else
             {
-                it.current_ = it.current_ -> getLeft();
+                current = current -> getLeft();
             }
         }
 
         //set right
         if(new_item.first > it -> first)
         {
-            temp -> setParent(it.current_);
-            it.current_ -> setRight(temp);
+            temp -> setParent(current);
+            current -> setRight(temp);
         }
         //set left
         else if(new_item.first < it -> first)
         {
-            temp -> setParent(it.current_);
-            it.current_ -> setLeft(temp);
+            temp -> setParent(current);
+            current -> setLeft(temp);
         }
 
         //if not balanced
-        if(it.current_ -> getParent() -> getBalance() == 0)
+        if(current -> getParent() -> getBalance() == 0)
         {
-            insertFix(it.current_, temp);
+            insertFix(current, temp);
         }
     }
     
