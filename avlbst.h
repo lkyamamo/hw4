@@ -228,20 +228,26 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
     //if p is the left child
     if(p -> getKey() < g -> getKey())
     {
-        g -> updateBalance(-1);
         int gBalance = g -> getBalance();
+        //balance = 1
+        if(gBalance == 1) 
+        {
+            g -> setBalance(0);
+            return;
+        }
         //balance = 0
-        if(gBalance == 0) return;
-        //balance = -1
-        else if(gBalance == -1) insertFix(g,p);
-        //balance = -2
+        else if(gBalance == 0) 
+        {
+            g -> setBalance(-1);
+            insertFix(g,p);
+        }
+        //balance of g = -1
         else
         {
             //zig zag cases
-            if(n -> getKey() > p -> getKey())
+            if(p -> getBalance(1))
             {
                 rotateLeft(p);
-                p = g -> getLeft();
                 rotateRight(g);
                 if(n -> getBalance() == -1)
                 {
@@ -255,6 +261,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     g -> setBalance(0);
                     n -> setBalance(0);
                 }
+                //n = 1
                 else
                 {
                     p -> setBalance(-1);
@@ -262,9 +269,9 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     n -> setBalance(0);
                 }
             }
+            //zig zig and p balance is -1
             else
             {
-                p = g -> getLeft();
                 rotateRight(g);
                 p -> setBalance(0);
                 g -> setBalance(0);
@@ -275,20 +282,26 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
     //must be right child since know the child exists
     else
     {
-        g -> updateBalance(1);
         int gBalance = g -> getBalance();
+        //balance = -1
+        if(gBalance == -1) 
+        {
+            g -> setBalance(0);
+            return;
+        }
         //balance = 0
-        if(gBalance == 0) return;
-        //balance = 1
-        else if(gBalance == 1) insertFix(g,p);
-        //balance = 2
+        else if(gBalance == 0) 
+        {
+            g -> setBalance(1);
+            insertFix(g,p);
+        }
+        //balance of g = 1
         else
         {
             //zig zag cases
-            if(n -> getKey() < p -> getKey())
+            if(p -> getBalance(-1))
             {
                 rotateRight(p);
-                p = g -> getRight();
                 rotateLeft(g);
                 if(n -> getBalance() == 1)
                 {
@@ -302,6 +315,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     g -> setBalance(0);
                     n -> setBalance(0);
                 }
+                //n = -1
                 else
                 {
                     p -> setBalance(1);
@@ -309,9 +323,9 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     n -> setBalance(0);
                 }
             }
+            //zig zig and p balance is -1
             else
             {
-                p = g -> getRight();
                 rotateLeft(g);
                 p -> setBalance(0);
                 g -> setBalance(0);
@@ -351,9 +365,6 @@ void AVLTree<Key,Value>::rotateRight(AVLNode<Key,Value>* n)
     tempLeft -> setRight(n);
     //set the parent to the left
     n -> setParent(tempLeft);
-
-    n -> updateBalance(2);
-    tempLeft -> updateBalance(1);
 }
 
 template<typename Key, typename Value>
@@ -384,9 +395,6 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
     tempRight -> setLeft(n);
     //set the parent to the left
     n -> setParent(tempRight);
-
-    n -> updateBalance(-2);
-    tempRight -> updateBalance(-1);
 }
 
 /*
