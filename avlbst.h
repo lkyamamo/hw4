@@ -191,13 +191,13 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
         if(current != nullptr) return;
 
         //set right
-        if(new_item.first > current -> getKey())
+        if(new_item.first > p -> getKey())
         {
             temp -> setParent(p);
             p -> setRight(temp);
         }
         //set left
-        else if(new_item.first < current -> getKey())
+        else if(new_item.first < p -> getKey())
         {
             temp -> setParent(p);
             p -> setLeft(temp);
