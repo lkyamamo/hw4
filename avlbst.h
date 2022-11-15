@@ -245,7 +245,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
         else
         {
             //zig zag cases
-            if(p -> getBalance(1))
+            if(p -> getBalance() == 1)
             {
                 rotateLeft(p);
                 rotateRight(g);
@@ -299,7 +299,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
         else
         {
             //zig zag cases
-            if(p -> getBalance(-1))
+            if(p -> getBalance() == -1)
             {
                 rotateRight(p);
                 rotateLeft(g);
