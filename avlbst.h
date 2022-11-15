@@ -202,6 +202,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
         {
             temp -> setParent(p);
             p -> setLeft(temp);
+            p -> updateBalance(-1);
         }
 
         if(p -> getBalance() != 0)
