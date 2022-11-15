@@ -205,7 +205,10 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 
         if(p -> getBalance() == -1) p -> setBalance(0);
         else if(p -> getBalance() == 1) p -> setBalance(0);
-        insertFix(current, temp);
+        else
+        {
+            insertFix(current, temp);
+        }
     }
     BinarySearchTree<Key,Value>::root_ = root_;
 }
