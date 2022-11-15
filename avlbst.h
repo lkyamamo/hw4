@@ -210,7 +210,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
             insertFix(current, temp);
         }
     }
-    
+    BinarySearchTree<Key,Value>::root_ = root_;
 }
 
 template<class Key, class Value>
@@ -393,7 +393,7 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
  * should swap with the predecessor and then remove.
  */
 template<class Key, class Value>
-void AVLTree<Key, Value>:: remove(const Key& key)
+void AVLTree<Key, Value>::remove(const Key& key)
 {
     // TODO
     AVLNode<Key,Value>* current = root_;
@@ -458,6 +458,7 @@ void AVLTree<Key, Value>:: remove(const Key& key)
     delete current;
 
     removeFix(p,diff);
+    BinarySearchTree<Key,Value>::root_ = root_;
 }
 
 template<typename Key, typename Value>
