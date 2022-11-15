@@ -195,6 +195,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
         {
             temp -> setParent(p);
             p -> setRight(temp);
+            p -> updateBalance(1);
         }
         //set left
         else if(new_item.first < p -> getKey())
@@ -203,9 +204,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
             p -> setLeft(temp);
         }
 
-        if(p -> getBalance() == -1) p -> setBalance(0);
-        else if(p -> getBalance() == 1) p -> setBalance(0);
-        else
+        if(p -> getBalance() != 0)
         {
             insertFix(p, temp);
         }
@@ -227,6 +226,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
     //if p is the left child
     if(p -> getKey() < g -> getKey())
     {
+        g -> updateBalance(-1);
         int gBalance = g -> getBalance();
         //balance = 0
         if(gBalance == 0) return;
@@ -273,6 +273,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
     //must be right child since know the child exists
     else
     {
+        g -> updateBalance(1);
         int gBalance = g -> getBalance();
         //balance = 0
         if(gBalance == 0) return;
