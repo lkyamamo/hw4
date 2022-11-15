@@ -142,6 +142,7 @@ protected:
     void rotateRight(AVLNode<Key,Value>* n);
     void rotateLeft(AVLNode<Key,Value>* n);
     void removeFix(AVLNode<Key,Value>* n, int diff);
+    AVLNode<Key,Value>* predecessor(AVLNode<Key, Value>* current);
     AVLNode<Key,Value>* root_;
 
 };
@@ -201,7 +202,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
         }
 
         if(p -> getBalance() == -1) p -> setBalance(0);
-        else if(p -> getBalance() == 1) p -> setBalanceq(0);
+        else if(p -> getBalance() == 1) p -> setBalance(0);
         if(p -> getBalance() == 0)
         {
             insertFix(current, temp);
@@ -383,8 +384,8 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
     n -> setParent(tempRight);
 
     n -> updateBalance(-2);
-    tempLeft -> updateBalance(-1);
-    tempLeft -> getLeft() -> updateBalance(-1);
+    tempRight -> updateBalance(-1);
+    tempRight -> getRight() -> updateBalance(-1);
 }
 
 /*
@@ -603,6 +604,44 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key,Value>* n, int diff)
         }
     }
 
+}
+
+template<class Key, class Value>
+AVLNode<Key, Value>* AVLTree<Key, Value>::predecessor(AVLNode<Key, Value>* current)
+{
+    // TODO
+    // has a left child then go to 
+    if(current -> getLeft() != nullptr)
+    {
+        //go to the left child
+        AVLNode<Key,Value>* temp = current -> getLeft();
+        //find right most child
+        while(temp -> getRight() != nullptr)
+        {
+            temp = temp -> getRight();
+        }
+        return temp;
+    }
+    // has a parent
+    else if(current -> getParent() != nullptr)
+    {
+        //right child
+        if(current -> getKey() <= current -> getParent() -> getKey())
+        {
+            return (current -> getParent());
+        }
+        //left child
+        else
+        { 
+            return (current -> getParent() -> getParent());
+        }
+    }
+    //has no parent means it is the root node with no left child
+    else
+    {
+        //means it is "right most" node in tree
+        return nullptr;
+    }
 }
 
 template<class Key, class Value>
