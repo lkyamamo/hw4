@@ -327,7 +327,7 @@ template<typename Key, typename Value>
 void AVLTree<Key,Value>::rotateRight(AVLNode<Key,Value>* n)
 {
     AVLNode<Key,Value>* tempLeft = n -> getLeft();
-    //make left parent the current parent
+    //make left's parent the current parent
     tempLeft -> setParent(n -> getParent());
     if(n -> getParent() != nullptr)
     {
@@ -354,7 +354,11 @@ void AVLTree<Key,Value>::rotateRight(AVLNode<Key,Value>* n)
 
     n -> updateBalance(2);
     tempLeft -> updateBalance(1);
-    if(tempLeft -> getLeft() != nullptr) tempLeft -> getLeft() -> updateBalance(1);
+    while(tempLeft -> getLeft() != nullptr) 
+    {
+        tempLeft -> getLeft() -> updateBalance(1);
+        tempLeft = tempLeft -> getLeft();
+    }
 }
 
 template<typename Key, typename Value>
@@ -388,7 +392,11 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
 
     n -> updateBalance(-2);
     tempRight -> updateBalance(-1);
-    if(tempRight -> getRight() != nullptr) tempRight -> getRight() -> updateBalance(-1);
+    while(tempRight -> getRight() != nullptr) 
+    {
+        tempRight -> getRight() -> updateBalance(-1);
+        tempRight = tempRight -> getRight();
+    }
 }
 
 /*
