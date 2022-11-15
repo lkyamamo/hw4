@@ -225,7 +225,6 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
     //if p is the left child
     if(p -> getKey() < g -> getKey())
     {
-        AVLNode<Key,Value>* temp = g -> getRight();
         int gBalance = g -> getBalance();
         //balance = 0
         if(gBalance == 0) return;
@@ -272,7 +271,6 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
     //must be right child since know the child exists
     else
     {
-        AVLNode<Key,Value>* temp = g -> getLeft();
         int gBalance = g -> getBalance();
         //balance = 0
         if(gBalance == 0) return;
@@ -440,7 +438,7 @@ void AVLTree<Key, Value>:: remove(const Key& key)
         if(p != nullptr)
         {
             //if right child
-            if( -> getRight() == current)
+            if(p -> getRight() == current)
             {
                 p -> setRight(nullptr);
             }
@@ -465,7 +463,7 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key,Value>* n, int diff)
 {
     if(n == nullptr) return;
 
-    Node<Key,Value>* p = n -> getParent();
+    AVLNode<Key,Value>* p = n -> getParent();
     int ndiff = 0;
     if(p != nullptr)
     {
