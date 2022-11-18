@@ -453,26 +453,26 @@ void AVLTree<Key, Value>::remove(const Key& key)
     }
     
     //up to this point current can have at most one child 
-    
-    //current has a left child
-    if(current -> getLeft() != nullptr)
+
+    //has a child
+    if(current -> getLeft() != nullptr || current -> getRight() != nullptr)
     {
-        AVLNode<Key,Value>* c = current -> getLeft();
+        //current is the left child
+        if(current -> getLeft() != nullptr) AVLNode<Key,Value>* c = current -> getLeft();
+        //current is the right child
+        else AVLNode<Key,Value>* c = current -> getRight();
+
         c -> setParent(p);
-        //current is right child of p
-        if(current == p -> getRight())p -> setRight(c);
-        //current is left child of p
-        else p -> setLeft(c);
-    }
-    //current has a right child
-    else if(current -> getRight() != nullptr)
-    {
-        AVLNode<Key,Value>* c = current -> getRight();
-        c -> setParent(p);
-        //current is right child of p
-        if(current == p -> getRight())p -> setRight(c);
-        //current is left child of p
-        else p -> setLeft(c);
+
+        //current is not the root node
+        if(p != nullptr)
+        {
+            //current is right child of p
+            if(current == p -> getRight())p -> setRight(c);
+            //current is left child of p
+            else p -> setLeft(c);
+        }
+        else root_ = c;
     }
     //has no child 
     else
