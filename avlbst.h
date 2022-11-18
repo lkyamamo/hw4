@@ -457,10 +457,11 @@ void AVLTree<Key, Value>::remove(const Key& key)
     //has a child
     if(current -> getLeft() != nullptr || current -> getRight() != nullptr)
     {
+        AVLNode<Key,Value>* c;
         //current is the left child
-        if(current -> getLeft() != nullptr) AVLNode<Key,Value>* c = current -> getLeft();
+        if(current -> getLeft() != nullptr) c = current -> getLeft();
         //current is the right child
-        else AVLNode<Key,Value>* c = current -> getRight();
+        else c = current -> getRight();
 
         c -> setParent(p);
 
