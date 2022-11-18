@@ -274,7 +274,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     g -> setBalance(0);
                     n -> setBalance(0);
                 }
-                if(n -> getParent() == nullptr) root_ = n;
+                //if(n -> getParent() == nullptr) root_ = n;
             }
             //zig zig and p balance is -1
             else
@@ -282,7 +282,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                 rotateRight(g);
                 p -> setBalance(0);
                 g -> setBalance(0);
-                if(p -> getParent() == nullptr) root_ = p;
+                //if(p -> getParent() == nullptr) root_ = p;
             }
             
         }
@@ -330,7 +330,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     g -> setBalance(0);
                     n -> setBalance(0);
                 }
-                if(n -> getParent() == nullptr) root_ = n;
+                //if(n -> getParent() == nullptr) root_ = n;
             }
             //zig zig and p balance is 1
             else
@@ -338,7 +338,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                 rotateLeft(g);
                 p -> setBalance(0);
                 g -> setBalance(0);
-                if(p -> getParent() == nullptr) root_ = p;
+                //if(p -> getParent() == nullptr) root_ = p;
             }
             
         }
@@ -376,6 +376,7 @@ void AVLTree<Key,Value>::rotateRight(AVLNode<Key,Value>* n)
     tempLeft -> setRight(n);
     //set the parent to the left
     n -> setParent(tempLeft);
+    if(tempLeft -> getParent() == nullptr) root_ = tempLeft;
 }
 
 template<typename Key, typename Value>
@@ -408,6 +409,7 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
     tempRight -> setLeft(n);
     //set the parent to the left
     n -> setParent(tempRight);
+    if(tempRight -> getParent() == nullptr) root_ = tempRight;
 }
 
 /*
@@ -568,6 +570,7 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key,Value>* n, int diff)
                     g -> setBalance(0);
                 }
                 removeFix(p,ndiff);
+                if(g -> getParent() )
             }
         }
     }
