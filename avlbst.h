@@ -156,7 +156,6 @@ protected:
 template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
-    std::cout << new_item.first << std::endl;
     // TODO
     AVLNode<Key,Value>* temp = new AVLNode<Key,Value>(new_item.first, new_item.second, nullptr);
     temp -> setBalance(0);
