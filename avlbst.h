@@ -570,7 +570,6 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key,Value>* n, int diff)
                     g -> setBalance(0);
                 }
                 removeFix(p,ndiff);
-                if(g -> getParent() )
             }
         }
     }
