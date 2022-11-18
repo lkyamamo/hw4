@@ -485,6 +485,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
             }
         }
         // no parent means it is root node
+        else
         {
             root_ = nullptr;
         }
