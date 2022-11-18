@@ -143,11 +143,19 @@ protected:
     void rotateLeft(AVLNode<Key,Value>* n);
     void removeFix(AVLNode<Key,Value>* n, int diff);
     AVLNode<Key,Value>* predecessor(AVLNode<Key, Value>* current);
+    virtual ~AVLTree();
+    virtual void clear();
 
 protected:   
     AVLNode<Key,Value>* root_ = nullptr;
 
 };
+
+template<class Key, class Value>
+void AVLTree<Key, Value>::clear(){
+    BinarySearchTree<Key,Value>::clear();
+    root_ = nullptr;
+}
 
 /*
  * Recall: If key is already in the tree, you should 
