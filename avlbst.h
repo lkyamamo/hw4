@@ -438,6 +438,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
     //2 children
     if(current -> getLeft() != nullptr && current -> getRight() != nullptr)
     {
+        if(root_ == current) root_ = predecessor(current);
         nodeSwap(current, predecessor(current));
     }
 
