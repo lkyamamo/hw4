@@ -417,6 +417,7 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
 template<class Key, class Value>
 void AVLTree<Key, Value>::remove(const Key& key)
 {
+    if(root_ == nullptr) return;
     // TODO
     AVLNode<Key,Value>* current = root_;
     while(current != nullptr)
