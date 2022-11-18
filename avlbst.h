@@ -268,6 +268,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     g -> setBalance(0);
                     n -> setBalance(0);
                 }
+                if(n -> getParent() == nullptr) root_ = n;
             }
             //zig zig and p balance is -1
             else
@@ -275,6 +276,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                 rotateRight(g);
                 p -> setBalance(0);
                 g -> setBalance(0);
+                if(p -> getParent() == nullptr) root_ = p;
             }
             
         }
@@ -322,6 +324,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     g -> setBalance(0);
                     n -> setBalance(0);
                 }
+                if(n -> getParent() == nullptr) root_ = n;
             }
             //zig zig and p balance is 1
             else
@@ -329,12 +332,12 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                 rotateLeft(g);
                 p -> setBalance(0);
                 g -> setBalance(0);
+                if(p -> getParent() == nullptr) root_ = p;
             }
             
         }
     }
     
-    if(p -> getParent() == nullptr) root_ = p;
 }
 
 template<typename Key, typename Value>
