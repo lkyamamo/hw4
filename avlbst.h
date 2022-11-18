@@ -143,7 +143,6 @@ protected:
     void rotateLeft(AVLNode<Key,Value>* n);
     void removeFix(AVLNode<Key,Value>* n, int diff);
     AVLNode<Key,Value>* predecessor(AVLNode<Key, Value>* current);
-    virtual ~AVLTree();
     virtual void clear();
 
 protected:   
