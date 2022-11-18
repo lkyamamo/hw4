@@ -431,6 +431,8 @@ void AVLTree<Key, Value>::remove(const Key& key)
         else current = current -> getLeft();
     }
 
+    if(current == nullptr) return;
+
     //2 children
     if(current -> getLeft() != nullptr && current -> getRight() != nullptr)
     {

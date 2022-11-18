@@ -750,10 +750,8 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
 template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::clear()
 {
-    std::cout << "starting clear" << std::endl;
     recursiveDelete(root_);
     root_ = nullptr;
-    std::cout << "finished clear" << std::endl;
 }
 
 template<typename Key, typename Value>
