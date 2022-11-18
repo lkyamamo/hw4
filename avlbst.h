@@ -323,7 +323,7 @@ void AVLTree<Key,Value>::insertFix(AVLNode<Key,Value>* p, AVLNode<Key,Value>* n)
                     n -> setBalance(0);
                 }
             }
-            //zig zig and p balance is -1
+            //zig zig and p balance is 1
             else
             {
                 rotateLeft(g);
@@ -361,6 +361,8 @@ void AVLTree<Key,Value>::rotateRight(AVLNode<Key,Value>* n)
     
     //make the left of current the right of the left
     n -> setLeft(tempLeft -> getRight());
+    //make the parent of the moved node n
+    n -> getLeft() -> setParent(n);
     //make the right the current
     tempLeft -> setRight(n);
     //set the parent to the left
@@ -391,6 +393,8 @@ void AVLTree<Key,Value>::rotateLeft(AVLNode<Key,Value>* n)
     
     //make the right of current the left of the right
     n -> setRight(tempRight -> getLeft());
+    //make the parent of the moved node n
+    n -> getRight() -> setParent(n);
     //make left the current
     tempRight -> setLeft(n);
     //set the parent to the left
